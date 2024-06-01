@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportToExcel", "ExportToEx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportToWord", "ExportToWord\ExportToWord.csproj", "{3E8A3853-5F66-4257-B940-FC40DB40670C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PendulumSimulator", "sim\PendulumSimulator.csproj", "{C3ED662A-5021-4A36-9CD9-771D237600F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3E8A3853-5F66-4257-B940-FC40DB40670C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E8A3853-5F66-4257-B940-FC40DB40670C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E8A3853-5F66-4257-B940-FC40DB40670C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3ED662A-5021-4A36-9CD9-771D237600F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3ED662A-5021-4A36-9CD9-771D237600F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3ED662A-5021-4A36-9CD9-771D237600F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3ED662A-5021-4A36-9CD9-771D237600F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

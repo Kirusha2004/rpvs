@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ExportToExcel\ExportToExcel.csproj" />
     <ProjectReference Include="..\ExportToWord\ExportToWord.csproj" />
+    <ProjectReference Include="..\sim\PendulumSimulator.csproj" />
   </ItemGroup>
 
 </Project>

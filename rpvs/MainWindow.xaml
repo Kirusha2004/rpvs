@@ -1,0 +1,150 @@
+﻿<Window x:Class="PendulumSimulation.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:helix="http://helix-toolkit.org/wpf"
+        Title="Pendulum Simulation" Height="834" Width="800">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Background" Value="#FF6200EE"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" ShadowDepth="3" BlurRadius="5"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF6200EE"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="3"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="321*"/>
+            <ColumnDefinition Width="79*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Foreground="White" Grid.ColumnSpan="2">
+            <!-- Вкладка для графика и параметров 2D -->
+            <TabItem Header="График и 2D">
+                <Grid Background="#3b5998" Margin="10,0,-10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="99*"/>
+                        <ColumnDefinition Width="199*"/>
+                        <ColumnDefinition Width="298*"/>
+                        <ColumnDefinition Width="199*"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView x:Name="_plotView" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,10,10,390" Foreground="White"/>
+                    <Canvas x:Name="PendulumCanvas" Background="Transparent" Grid.ColumnSpan="2" Margin="0,368,87,0" Grid.Column="1" RenderTransformOrigin="0.5,0.5" Width="400" Height="400">
+                        <!-- Ось X -->
+                        <Line X1="0" Y1="200" X2="400" Y2="200" Stroke="White" StrokeThickness="2"/>
+                        <!-- Ось Y -->
+                        <Line X1="200" Y1="0" X2="200" Y2="400" Stroke="White" StrokeThickness="2"/>
+                        <!-- Подпись оси X -->
+                        <TextBlock Text="X" Foreground="White" FontSize="16" FontWeight="Bold" Canvas.Left="380" Canvas.Top="210"/>
+                        <!-- Подпись оси Y -->
+                        <TextBlock Text="Y" Foreground="White" FontSize="16" FontWeight="Bold" Canvas.Left="210" Canvas.Top="10"/>
+                    </Canvas>
+
+                    <StackPanel Grid.Column="3" Margin="10,10,10,0" VerticalAlignment="Top">
+                        <Label Content="Длина (L)" Foreground="White"/>
+                        <Slider x:Name="LengthSlider" Minimum="0.5" Maximum="2.0" Value="1.0" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="LengthSlider_ValueChanged"/>
+                        <TextBox x:Name="LengthInput" Text="1.0" IsReadOnly="True"/>
+
+                        <Label Content="Ускорение свободного падения (G)" Foreground="White" />
+                        <Slider x:Name="GravitySlider" Minimum="0.1" Maximum="20.0" Value="9.8" TickFrequency="0.1" IsSnapToTickEnabled="True" ValueChanged="GravitySlider_ValueChanged"/>
+                        <TextBox x:Name="GravityInput" Text="9.8" IsReadOnly="True"/>
+
+                        <Label Content="Начальный угол (градусы)" Foreground="White" />
+                        <Slider x:Name="AngleSlider" Minimum="-90" Maximum="90" Value="0.0" TickFrequency="1" IsSnapToTickEnabled="True" ValueChanged="AngleSlider_ValueChanged"/>
+                        <TextBox x:Name="AngleInput" Text="0.0" IsReadOnly="True"/>
+
+                        <Label Content="Шаг времени (dt)" Foreground="White"  />
+                        <Slider x:Name="DtSlider" Minimum="0.001" Maximum="0.1" Value="0.01" TickFrequency="0.001" IsSnapToTickEnabled="True" ValueChanged="DtSlider_ValueChanged"/>
+                        <TextBox x:Name="DtInput" Text="0.01" IsReadOnly="True"/>
+
+                        <Button Content="Начать симуляцию" Click="StartSimulation_Click" Margin="0,10,0,0" Width="170"/>
+                        <Button Content="Остановить симуляцию" Click="StopSimulation_Click" Margin="0,5,0,0" Width="169"/>
+                        <Button Content="Сбросить симуляцию" Click="ResetSimulation_Click" Margin="0,5,0,0" Width="168"/>
+                        <Button Content="Экспорт в Excel" Click="ExportToExcel_Click"/>
+                        <Button Content="Экспорт в Word" Click="ExportToWord_Click" Width="170"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <!-- Вкладка для 3D визуализации -->
+            <TabItem Header="3D">
+                <TabItem.Background>
+                    <LinearGradientBrush EndPoint="0,1">
+                        <GradientStop Color="#FFF0F0F0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </TabItem.Background>
+                <Grid Background="#3b5998">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35*"/>
+                        <ColumnDefinition Width="759*"/>
+                    </Grid.ColumnDefinitions>
+                    <helix:HelixViewport3D x:Name="PendulumViewport" Grid.ColumnSpan="2">
+                        <helix:SunLight/>
+                        <helix:DefaultLights/>
+                    </helix:HelixViewport3D>
+                </Grid>
+            </TabItem>
+            <!-- Вкладка "О программе" -->
+            <TabItem Header="О программе">
+                <Grid Background="#3b5998">
+                    <TextBlock TextWrapping="Wrap" Foreground="White" FontSize="16" Margin="20">
+                        Это приложение симулирует гармонические колебания маятника маятника. 
+                        Вы можете изменять параметры маятника, такие как длина, ускорение свободного падения, начальный угол и шаг времени. 
+                        Приложение позволяет визуализировать движение маятника в 2D и 3D представлениях, а также экспортировать данные симуляции в Excel и Word.
+                    </TextBlock>
+                </Grid>
+            </TabItem>
+            <!-- Вкладка "Автор" -->
+            <TabItem Header="Автор">
+                <Grid Background="#3b5998">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="35*"/>
+                        <ColumnDefinition Width="759*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="20,20,20,0" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                        <TextBlock Text="Автор: Иван Иванов" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="Контактная информация:" Foreground="White" FontSize="16" Margin="0,10,0,0"/>
+                        <Button Content="Написать на Email" Click="ContactEmail_Click" Width="200"/>
+                        <Button Content="Написать в Telegram" Click="ContactTelegram_Click" Width="200" Margin="0,5,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
